@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Livraisons{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestion des Livraisons</h1>
+        {#<a href="{{ path('app_delivery_new') }}" class="btn btn-primary btn-sm float-end mb-3">Créer une nouvelle livraison</a>#}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des livraisons</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Code de livraison</th>
+                            <th>Date</th>
+                            <th>Range (début)</th>
+                            <th>Range (début)</th>
+                            <th>Nbre. carte</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for delivery in deliveries %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ delivery.deliveryCode }}</td>
+                            <td>{{ delivery.date ? delivery.date|date('Y-m-d') : '' }}</td>
+                            <td>{{ delivery.range1 }}</td>
+                            <td>{{ delivery.range2 }}</td>
+                            <td>{{ delivery.cardTotal }}</td>
+                            <td>
+                                <a href="{{ path('app_delivery_show', {'id': delivery.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bin{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Détails du Bin</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Informations sur le Bin</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Date d'octroi</th>
+                            <td>{{ bin.grantDate ? bin.grantDate|date('Y-m-d') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">No. série</th>
+                            <td>{{ bin.serial }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Range (début)</th>
+                            <td>{{ bin.range1 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Range (fin)</th>
+                            <td>{{ bin.range2 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Dernier PAN émis</th>
+                            <td>{{ bin.lastEmittedPan }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('app_bin_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                <a href="{{ path('app_bin_edit', {'id': bin.id}) }}" class="btn btn-warning">Modifier</a>
+            </div>
+        </div>
+
+        {{ include('bin/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

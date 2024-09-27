@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Bon de Livraison</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Détails de la Livraison</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong>Code de Commande:</strong>
+                        <p>{{ order.orderCode }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Date de Commande:</strong>
+                        <p>{{ order.orderDate ? order.orderDate|date('Y-m-d') : 'N/A' }}</p>
+                    </div>
+                    {#<div class="col-md-6 mb-3">
+                        <strong>Date de Livraison:</strong>
+                        <p>{{ order.date ? order.date|date('Y-m-d') : 'N/A' }}</p>
+                    </div>#}
+                    <div class="col-md-6 mb-3">
+                        <strong>Numéro de Série:</strong>
+                        <p>{{ order.serial }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Total de la Carte:</strong>
+                        <p>{{ order.cardTotal }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Range (début):</strong>
+                        <p>{{ order.range1 }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Range (fin):</strong>
+                        <p>{{ order.range2 }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Type de Carte:</strong>
+                        <p>{{ order.cardType }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('app_order_index') }}" class="btn btn-secondary">Retour à la liste des commandes</a>
+                <a href="{{ path('app_delivery_new', {'id': order.id}) }}" class="btn btn-success">Valider la livraison</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Détails de la Commande</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Informations sur la Commande</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Code commande</th>
+                            <td>{{ order.orderCode }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date de commande</th>
+                            <td>{{ order.orderDate ? order.orderDate|date('Y-m-d') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">No. Série</th>
+                            <td>{{ order.serial }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Banque associée</th>
+                            <td>{{ order.bin.bank.bankCode }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nbre. de carte</th>
+                            <td>{{ order.cardTotal }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Range (début)</th>
+                            <td>{{ order.range1 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Range (fin)</th>
+                            <td>{{ order.range2 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Type de carte</th>
+                            <td>{{ order.cardType }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('app_order_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn btn-warning">Modifier</a>
+            </div>
+        </div>
+
+        {{ include('order/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

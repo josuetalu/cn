@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listes des banques{% endblock %}
+
+{% block body %}
+    <div class="mt-4 container">
+        <h1 class="mb-4">Gestion des banques</h1>
+        <a href="{{ path('app_bank_new') }}" class="btn btn-primary btn-sm float-end">Créer une nouvelle banque</a>
+        <br/>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des banques</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Banque</th>
+                            <th>Addressz</th>
+                            <th>Contact</th>
+                            <th>Date</th>
+                            <th>Email</th>
+                            <th>Site web</th>
+                            <th>Tél.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for bank in banks %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ bank.bankCode }}</td>
+                            <td>{{ bank.address }}</td>
+                            <td>{{ bank.contact }}</td>
+                            <td>{{ bank.date ? bank.date|date('Y-m-d') : '' }}</td>
+                            <td>{{ bank.defaultEmail }}</td>
+                            <td>{{ bank.website }}</td>
+                            <td>{{ bank.defaultNumber }}</td>
+                            <td>
+                                <a href="{{ path('app_bank_show', {'id': bank.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                                <a href="{{ path('app_bank_edit', {'id': bank.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une nouvelle Banque{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Créer une nouvelle Banque</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Formulaire de création</h5>
+            </div>
+            <div class="card-body">
+                {{ include('bank/_form.html.twig') }}
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('app_bank_index') }}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

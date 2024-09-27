@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listes des commandes{% endblock %}
+
+{% block body %}
+    <div class="mt-4 container">
+        <h1 class="mb-4">Gestion des commandes</h1>
+        <a href="{{ path('app_order_new') }}" class="btn btn-primary btn-sm float-end">Créer une nouvelle commande</a>
+        <br/>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des commandes</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Code de la commande</th>
+                            <th>Date de la commande</th>
+                            <th>No. de serie</th>
+                            <th>Banque</th>
+                            <th>Nbre. de carte</th>
+                            <th>Range (début)</th>
+                            <th>Range (début)</th>
+                            <th>Type de carte</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ order.orderCode }}</td>
+                            <td>{{ order.orderDate ? order.orderDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ order.serial }}</td>
+                            <td>{{ order.bin.bank.bankCode }}</td>
+                            <td>{{ order.cardTotal }}</td>
+                            <td>{{ order.range1 }}</td>
+                            <td>{{ order.range2 }}</td>
+                            <td>{{ order.cardType }}</td>
+                            <td>
+                                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                                <br/>
+                                <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                <br/>
+                                <a href="{{ path('app_order_confirmation', {'id': order.id}) }}" class="btn btn-warning btn-sm">Livraison</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
