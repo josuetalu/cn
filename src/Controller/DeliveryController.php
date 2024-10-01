@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 
 /**
- * @Route("/delivery")
+ * @Route("admin/delivery")
  */
 class DeliveryController extends AbstractController
 {

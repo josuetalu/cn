@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @Route("/bank")
+ * @Route("admin/bank")
  */
 class BankController extends AbstractController
 {

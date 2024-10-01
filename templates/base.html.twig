@@ -25,7 +25,7 @@
     </head>
     <body>
         <div id="wrapper">
-        <!-- Sidebar -->
+          <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
@@ -42,7 +42,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="">
+                    <a class="nav-link" href="{{ path('dashboard') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
@@ -88,6 +88,19 @@
                     </a>
                 </li>
 
+                <!-- Nav Item - Users -->
+                {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_user_index') }}">
+                        <i class="fas fa-user fa-sm"></i>
+                        <span>Utilisateurs</span>
+                    </a>
+                </li>
+                {% endif %}
+
+
+                
+
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
@@ -99,7 +112,13 @@
             </ul>
         <!-- End of Sidebar -->
 
+        
+        
+
         <div id="content-wrapper" class="d-flex flex-column">
+
+            {% include 'nav_admin.html.twig' %}
+            
             {% block body %}{% endblock %}
         </div>
         </div>

@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @Route("/bin")
+ * @Route("admin/bin")
  */
 class BinController extends AbstractController
 {

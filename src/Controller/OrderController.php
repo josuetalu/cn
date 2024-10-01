@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @Route("/order")
+ * @Route("admin/order")
  */
 class OrderController extends AbstractController
 {
