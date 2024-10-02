@@ -26,90 +26,86 @@
     <body>
         <div id="wrapper">
           <!-- Sidebar -->
-            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
-                    <div class="sidebar-brand-icon">
-                        {#<img height="50" src="{{ asset('assets/img/whlogo.png') }}"/>#}
-                         <i class="fas fa-fw fa-credit-card"></i>
-                    </div>
-                    <div class="sidebar-brand-text mx-3">BINMANAGER</div>
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">BINMANAGER</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'dashboard' ? 'active' }}">
+                <a class="nav-link" href="{{ path('dashboard') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
                 </a>
+            </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
-                <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ path('dashboard') }}">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Gestion
+            </div>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+            <!-- Nav Item - Articles -->
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'app_bank' ? 'active' }}">
+                <a class="nav-link" href="{{ path('app_bank_index') }}">
+                    <i class="fas fa-fw fa-university"></i>
+                    <span>Banques</span>
+                </a>
+            </li>
 
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Gestion
-                </div>
+            <!-- Nav Item - Catégories -->
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'app_bin' ? 'active' }}">
+                <a class="nav-link" href="{{ path('app_bin_index') }}">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>BIN</span>
+                </a>
+            </li>
 
-                <!-- Nav Item - Articles -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_bank_index') }}">
-                            <i class="fas fa-fw fa-university"></i>
-                            <span>Banques</span>
-                        </a>
-                    </li>
+            <!-- Nav Item - Commandes -->
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'app_order' ? 'active' }}">
+                <a class="nav-link" href="{{ path('app_order_index') }}">
+                    <i class="fas fa-fw fa-clipboard-list"></i>
+                    <span>Commandes</span>
+                </a>
+            </li>
 
-                    <!-- Nav Item - Catégories -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_bin_index') }}">
-                            <i class="fas fa-fw fa-credit-card"></i>
-                            <span>BIN</span>
-                        </a>
-                    </li>
+            <!-- Nav Item - Livraisons -->
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'app_delivery' ? 'active' }}">
+                <a class="nav-link" href="{{ path('app_delivery_index') }}">
+                    <i class="fas fa-fw fa-truck"></i>
+                    <span>Livraisons</span>
+                </a>
+            </li>
 
-                <!-- Nav Item - Commandes -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_order_index') }}">
-                        <i class="fas fa-fw fa-clipboard-list"></i>
-                        <span>Commandes</span>
-                    </a>
-                </li>
+            <!-- Nav Item - Users -->
+            {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'app_user' ? 'active' }}">
+                <a class="nav-link" href="{{ path('app_user_index') }}">
+                    <i class="fas fa-user fa-sm"></i>
+                    <span>Utilisateurs</span>
+                </a>
+            </li>
+            {% endif %}
 
-                <!-- Nav Item - Livraisons -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_delivery_index') }}">
-                        <i class="fas fa-fw fa-truck"></i>
-                        <span>Livraisons</span>
-                    </a>
-                </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
-                <!-- Nav Item - Users -->
-                {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_user_index') }}">
-                        <i class="fas fa-user fa-sm"></i>
-                        <span>Utilisateurs</span>
-                    </a>
-                </li>
-                {% endif %}
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
 
-
-                
-
-                <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
-
-                <!-- Sidebar Toggler (Sidebar) -->
-                <div class="text-center d-none d-md-inline">
-                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-                </div>
-
-            </ul>
+        </ul>
         <!-- End of Sidebar -->
 
         

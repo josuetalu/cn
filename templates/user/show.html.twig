@@ -11,30 +11,28 @@
                 <h5 class="m-0">Informations sur l'Utilisateur</h5>
             </div>
             <div class="card-body">
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <th scope="row">ID</th>
-                            <td>{{ user.id }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nom d'utilisateur</th>
-                            <td>{{ user.username }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Rôles</th>
-                            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nom complet</th>
-                            <td>{{ user.fullname }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Date d'inscription</th>
-                            <td>{{ user.registrationDate ? user.registrationDate|date('Y-m-d') : '' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong>ID:</strong>
+                        <p>{{ user.id }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Nom d'utilisateur:</strong>
+                        <p>{{ user.username }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Rôles:</strong>
+                        <p>{{ user.roles ? user.roles|json_encode : '' }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Nom complet:</strong>
+                        <p>{{ user.fullname }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Date d'inscription:</strong>
+                        <p>{{ user.registrationDate ? user.registrationDate|date('Y-m-d') : 'N/A' }}</p>
+                    </div>
+                </div>
             </div>
             <div class="card-footer text-end">
                 <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Retour à la liste</a>
