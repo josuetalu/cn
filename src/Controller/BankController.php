@@ -22,8 +22,9 @@ class BankController extends AbstractController
     public function index(BankRepository $bankRepository): Response
     {
         return $this->render('bank/index.html.twig', [
-            'banks' => $bankRepository->findAll(),
-        ]);
+            'banks' => $bankRepository->findBy([], ['id' => 'DESC']),
+        ]);        
+        
     }
 
     /**
@@ -36,6 +37,7 @@ class BankController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $bank->setDate(new \DateTime());
             $entityManager->persist($bank);
             $entityManager->flush();
 

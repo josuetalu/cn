@@ -4,51 +4,58 @@
 
 {% block body %}
 <div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6"> <!-- Largeur ajustée ici -->
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="p-5">
-                    <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-4">BIN Manager</h1>
-                    </div>
-                    <form method="post" class="user">
+        <div class="col-md-5">
+            <div class="card shadow" style="margin-top:50px">
+                <div class="card-header text-center">
+                    <h1 class="h3 mb-3 font-weight-normal">BIN Manager</h1>
+                </div>
+                <div class="card-body">
+                    <form method="post">
                         {% if error %}
-                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            <div class="alert alert-danger">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
                         {% endif %}
 
                         {% if app.user %}
-                            <div class="mb-3">
-                                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                            <div class="alert alert-success">
+                                Vous êtes connecté en tant que {{ app.user.userIdentifier }}
+                                <a href="{{ path('app_logout') }}" class="btn btn-link">Se déconnecter</a>
                             </div>
                         {% endif %}
 
-                        <div class="form-group">
-                            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control form-control-user" autocomplete="username" required autofocus placeholder="Username">
+                        <div class="form-group mb-3">
+                            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus placeholder="Username">
                         </div>
-                        <div class="form-group">
-                            <input type="password" name="password" id="inputPassword" class="form-control form-control-user" autocomplete="current-password" required placeholder="Password">
+                        
+                        <div class="form-group mb-3">
+                            <input type="password" name="password" id="inputPassword" class="form-control" required placeholder="Password">
                         </div>
 
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox small">
-                                <input type="checkbox" class="custom-control-input" id="customCheck" name="_remember_me">
-                                <label class="custom-control-label" for="customCheck">Remember Me</label>
-                            </div>
-                        </div>
+                        {#<div class="form-check mb-3">
+                            <input type="checkbox" id="customCheck" name="_remember_me" class="form-check-input">
+                            <label for="customCheck" class="form-check-label">Remember Me</label>
+                        </div>#}
 
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                        <button class="btn btn-primary btn-user btn-block" type="submit">
-                            Sign in
+                        <button type="submit" class="btn btn-primary w-100">
+                            Connexion
                         </button>
                     </form>
+                    
+                    {#
                     <hr>
                     <div class="text-center">
-                        {#<a class="small" href="{{ path('app_register') }}">Create an Account!</a>#}
-                    </div>
+                        <a href="{{ path('app_register') }}" class="btn btn-link">Create an Account!</a>
+                    </div>#}
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 </div>
 {% endblock %}

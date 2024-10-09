@@ -22,7 +22,7 @@ class BinController extends AbstractController
     public function index(BinRepository $binRepository): Response
     {
         return $this->render('bin/index.html.twig', [
-            'bins' => $binRepository->findAll(),
+            'bins' => $binRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
 

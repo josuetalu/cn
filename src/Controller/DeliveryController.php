@@ -24,7 +24,7 @@ class DeliveryController extends AbstractController
     public function index(DeliveryRepository $deliveryRepository): Response
     {
         return $this->render('delivery/index.html.twig', [
-            'deliveries' => $deliveryRepository->findAll(),
+            'deliveries' => $deliveryRepository->findAll([], ['id'=> 'DESC']),
         ]);
     }
 

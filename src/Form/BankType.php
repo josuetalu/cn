@@ -14,7 +14,7 @@ class BankType extends AbstractType
         $builder
         ->add('bankCode', null, [
             'attr' => ['class' => 'form-control'],
-            'label' => 'Code de la Banque'
+            'label' => 'Nom de la banque'
         ])
         ->add('address', null, [
             'attr' => ['class' => 'form-control'],
@@ -24,10 +24,10 @@ class BankType extends AbstractType
             'attr' => ['class' => 'form-control'],
             'label' => 'Contact'
         ])
-        ->add('date', null, [
+        /*->add('date', null, [
             'attr' => ['class' => 'form-control'],
             'label' => 'Date'
-        ])
+        ])*/
         ->add('defaultEmail', null, [
             'attr' => ['class' => 'form-control'],
             'label' => 'Email par défaut'

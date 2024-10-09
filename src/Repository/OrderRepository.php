@@ -20,6 +20,7 @@ class OrderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->andWhere('o.delivered = :delivered')
             ->setParameter('delivered', false)
+            ->orderBy('o.id', 'DESC')  // Ajout du tri par id décroissant
             ->getQuery()
             ->getResult();
     }    
