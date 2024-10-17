@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Range index{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestion des plages</h1>
+        <h3> BIN : {{bin.bank.bankCode}} / No. serie : {{bin.serial}} </h3>
+        <a href="{{ path('app_range_new', {'id_bin': bin.id}) }}" class="btn btn-primary mb-3">Créer une nouvelle plage</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des plages</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                            <th>Date de création</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for range in ranges %}
+                        <tr>
+                            <td>{{ range.id }}</td>
+                            <td>{{ range.start }}</td>
+                            <td>{{ range.end }}</td>
+                            <td>{{ range.createdAt ? range.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>
+                                <a href="{{ path('app_range_show', {'id': range.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-primary">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">Afficher</span>
+                                </a>
+
+                                <a href="{{ path('app_range_edit', {'id': range.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                    <span class="text">Modifier</span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

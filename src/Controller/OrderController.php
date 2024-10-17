@@ -3,14 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\Range;
+use App\Entity\OrderRange;
 use App\Entity\Bin;
 use App\Form\OrderType;
+use App\Form\ConfirmDeliveryType;
 use App\Repository\OrderRepository;
+use App\Repository\RangeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+
 
 /**
  * @Route("admin/order")
@@ -30,7 +35,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/new", name="app_order_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,RangeRepository $rangeRepository): Response
     {
         $order = new Order();
         $form = $this->createForm(OrderType::class, $order);
@@ -38,46 +43,115 @@ class OrderController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
     
-            // Récupérer les informations nécessaires
-            $lastEmittedPan = $order->getBin()->getLastEmittedPan();
-            $totalCard = $order->getCardTotal();
-            $lastPanAuthorized = $order->getBin()->getRange2(); // On suppose que cette valeur est stockée quelque part
-            $serialNumber = $order->getBin()->getSerial();
-    
-            // Vérifier si la plage autorise cette commande
-            list($isAvailable, $excess) = $this->isAvaibleInRange($lastEmittedPan, $totalCard, $lastPanAuthorized);
-    
-            if (!$isAvailable) {
-                // Si la commande dépasse la plage, afficher un message d'erreur
-                $this->addFlash('error', "La commande dépasse la plage autorisée. Excès de {$excess} PAN(s).");
+
+            
+            $bin = $order->getBin();
+            $total_ordered = $order->getCardTotal();
+            $response = $this->isThereSpace($bin,$total_ordered);
+
+            dump($response);
+            /*array:6 [▼
+                2 => 200
+                3 => 150
+                4 => 250
+                6 => 200
+                7 => 50
+                "remaining_orders" => 150
+            ]*/
+
+            // Si la commande dépasse la plage, afficher un message d'erreur
+            if($response['remaining_orders'] > 0)
+            {
+               
+                $this->addFlash('error', "La commande dépasse la plage autorisée. Excès de PAN(s).");
+                    return $this->renderForm('order/new.html.twig', [
+                        'order' => $order,
+                        'form' => $form,
+                    ]);
                 
-                return $this->renderForm('order/new.html.twig', [
-                    'order' => $order,
-                    'form' => $form,
-                ]);
             }
-    
-            // Si tout est en ordre, continuer l'enregistrement
+
+            // Récupérer les informations nécessaires
+            $serialNumber = $bin->getSerial();
+
+            //Enregistrement de la commande
             $order->setOrderCode("ORD-" . strtoupper(uniqid()));
             $order->setDate(new \DateTime());
             $order->setDelivered(false);
             $order->setOrderDate(new \DateTime());
             $order->setSerial($serialNumber);
-    
-            // Générer les nouveaux PANs
-            $response = $this->generatePanRange($lastEmittedPan, $totalCard, $serialNumber);
-            $order->setRange1($response['firstNewPan']);
-            $order->setRange2($response['lastNewPan']);
-    
-            // Mettre à jour le dernier PAN émis dans l'entité Bin
-            $order->getBin()->setLastEmittedPan($response['lastNewPan']);
-    
-            // Persister la commande
+            $order->setRange1("null");
+            $order->setRange2("null");
+            $order->getBin()->setLastEmittedPan("null");
             $entityManager->persist($order);
             $entityManager->flush();
-    
-            // Redirection après succès
-            return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
+            //--dump($order);
+
+
+            $tampon = null; 
+            array_pop($response);
+            foreach ($response as $id_range => $number) {
+                $orderRange =  new OrderRange();
+                $orderRange->setOrder($order);
+
+                $range = $entityManager->getRepository(Range::class)->find($id_range);
+                $orderRange->setRange($range);
+
+                $orderRange->setTotal($number);
+
+                //Generation du pan debut et pan fin
+                $last_emitted_pan = $range->getLastEmittedPan();
+                if ($last_emitted_pan != null) {
+                    $last_emitted_pan = substr($last_emitted_pan, 6);
+                    dump("xxxxxxxxxxxxxxxxxx");
+                }
+                else{
+                   
+
+                    $last_emitted_pan = $this->getLastEmittedPanForTheRangeBefore($range->getId(),$rangeRepository);
+                    if($last_emitted_pan == null)
+                    {
+                        $last_emitted_pan = "0000000000";
+                    }
+                    else{
+                        $last_emitted_pan = substr($last_emitted_pan, 6);
+                    }
+                
+                    dump("ce que je veux voir : ".$last_emitted_pan);
+
+                    //$last_emitted_pan = "0000000000";
+                    /*if($tampon != null)
+                    {
+                        $last_emitted_pan = substr($tampon->getLastEmittedPan(), 6); 
+                    }
+                    else{
+                        $last_emitted_pan = "0000000000"; 
+                    }*/
+                      
+                }
+
+                $start_pan =((int) $last_emitted_pan ) + 1;
+                $end_pan =  ($start_pan  + $number) - 1;
+
+                $start_pan_str = $bin->getSerial().str_pad($start_pan, 10, '0', STR_PAD_LEFT);
+                $end_pan_str = $bin->getSerial().str_pad($end_pan, 10, '0', STR_PAD_LEFT);
+
+                //On ajoute aussi le dernier PAN  a la table range
+                $range->setLastEmittedPan($end_pan_str);
+                $entityManager->persist($range);
+                $entityManager->flush(); 
+                /*************************/
+
+                $orderRange->setStartPan( $start_pan_str);
+                $orderRange->setEndPan($end_pan_str);
+
+                $entityManager->persist($orderRange);
+                $entityManager->flush(); 
+
+               
+            }
+            $tampon = $range;
+
         }
     
         return $this->renderForm('order/new.html.twig', [
@@ -96,16 +170,6 @@ class OrderController extends AbstractController
         ]);
     }
 
-
-    /**
-     * @Route("/confirm/{id}", name="app_order_confirmation", methods={"GET"})
-     */
-    public function confirm(Order $order): Response
-    {
-        return $this->render('order/confirm.html.twig', [
-            'order' => $order,
-        ]);
-    }
 
 
     /**
@@ -175,6 +239,7 @@ class OrderController extends AbstractController
     
         // Calculer l'espace disponible
         $spaceAllowed = $lastPanAuthorized - $lastEmittedPan;
+
     
         // Vérifier si le nombre de PANs demandés dépasse l'espace disponible
         if ($numberOfPanOrdered > $spaceAllowed) {
@@ -186,5 +251,85 @@ class OrderController extends AbstractController
         // Si tout est correct, retourne true avec un dépassement de 0
         return [true, 0];
     }
+
+    private function isThereSpace(Bin $bin, int $total_ordered)
+    {
+       $output = [];
+       $ranges =  $bin->getRanges();
+
+       foreach($ranges as $range)
+       {  
+            //$end = (int) $range->getEnd();    
+            //$start = (int) $range->getStart();
+            $available = $range->getAvailableSpace();
+            dump("Voici :");
+            dump($available);
+
+        
+            switch (true) {
+                case $total_ordered == $available:
+                    $output[$range->getId()] = $total_ordered;
+                    $total_ordered = 0;
+                    break;
+            
+                case $total_ordered > $available:
+                    $output[$range->getId()] = $available;
+                    $total_ordered -= $available;
+                    break;
+            
+                case $total_ordered < $available:
+                    $output[$range->getId()] = $total_ordered;
+                    $total_ordered = 0;
+                    break;
+            }
+
+
+            if($total_ordered <= 0){
+                break;
+            }
+            
+       }
+
+
+       $output = array_filter($output, function($value) {
+        return $value !== 0;
+       });
+    
+       $output["remaining_orders"] = $total_ordered;
+       return $output;
+    }
+
+
+
+    public function getLastEmittedPanForTheRangeBefore(int $rangeId, RangeRepository $rangeRepository): ?string
+    {
+        // Récupère le Range avec l'ID fourni
+        $currentRange = $rangeRepository->find($rangeId);
+    
+        // Vérifie si le Range existe
+        if (!$currentRange) {
+            return null;
+        }
+    
+        // Cherche le Range précédent qui appartient au même Bin et dont la fin est avant le début du Range actuel
+        $previousRange = $rangeRepository->createQueryBuilder('r')
+            ->where('r.bin = :bin')
+            ->andWhere('r.end < :start')
+            ->setParameter('bin', $currentRange->getBin())
+            ->setParameter('start', $currentRange->getStart())
+            ->orderBy('r.end', 'DESC')
+            ->setMaxResults(1)  // On prend le plus proche avant
+            ->getQuery()
+            ->getOneOrNullResult();
+    
+        // Vérifie si un Range précédent est trouvé et retourne son lastEmittedPan
+        if ($previousRange) {
+            return $previousRange->getLastEmittedPan();
+        }
+    
+        // Retourne null si aucun Range précédent n'est trouvé
+        return null;
+    }
+    
     
 }

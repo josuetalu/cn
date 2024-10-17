@@ -3,7 +3,7 @@
 {% block title %}Order{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div class="container mt-4" style="width:40rem">
         <h1 class="mb-4">Bon de Livraison</h1>
 
         <div class="card">
@@ -46,9 +46,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="container">
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <br/>
+                <button class="btn btn-success">{{ button_label|default('Valider la livraison') }}</button>
+            {{ form_end(form) }}
+            <br/>
+            </div>
+
             <div class="card-footer text-end">
                 <a href="{{ path('app_order_index') }}" class="btn btn-secondary">Retour à la liste des commandes</a>
-                <a href="{{ path('app_delivery_new', {'id': order.id}) }}" class="btn btn-success">Valider la livraison</a>
+                {#<a href="{{ path('app_delivery_new', {'id': order.id}) }}" class="btn btn-success">Valider la livraison</a>#}
             </div>
         </div>
     </div>

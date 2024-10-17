@@ -19,6 +19,9 @@
         <!-- Custom styles for this template -->
         <link href="{{ asset('assets_admin/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -85,6 +88,15 @@
                     <i class="fas fa-fw fa-truck"></i>
                     <span>Livraisons</span>
                 </a>
+            </li> 
+
+
+            <!-- Nav Item - outofservice -->
+            <li class="nav-item {{ app.request.attributes.get('_route') starts with 'app_out_of_service' ? 'active' }}">
+                <a class="nav-link" href="{{ path('app_out_of_service_index') }}">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Hors services</span>
+                </a>
             </li>
 
             <!-- Nav Item - Users -->
@@ -137,6 +149,19 @@
             <!-- Page level custom scripts -->
             <script src="{{ asset('assets_admin/js/demo/chart-area-demo.js') }}"></script>
             <script src="{{ asset('assets_admin/js/demo/chart-pie-demo.js') }}"></script>
+
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+                <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd', // Format de la date
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
         {% endblock %}
     </body>
 </html>

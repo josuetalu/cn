@@ -71,6 +71,16 @@ class Order
      */
     private $delivered;
 
+    /**
+     * @ORM\OneToMany(targetEntity=OrderRange::class, mappedBy="_order")
+     */
+    private $orderRanges;
+
+    public function __construct()
+    {
+        $this->orderRanges = new ArrayCollection();
+    }
+
     /*// Implement the __toString method
     public function __toString(): string
     {
@@ -193,6 +203,36 @@ class Order
     public function setDelivered(bool $delivered): self
     {
         $this->delivered = $delivered;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderRange>
+     */
+    public function getOrderRanges(): Collection
+    {
+        return $this->orderRanges;
+    }
+
+    public function addOrderRange(OrderRange $orderRange): self
+    {
+        if (!$this->orderRanges->contains($orderRange)) {
+            $this->orderRanges[] = $orderRange;
+            $orderRange->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderRange(OrderRange $orderRange): self
+    {
+        if ($this->orderRanges->removeElement($orderRange)) {
+            // set the owning side to null (unless already changed)
+            if ($orderRange->getOrder() === $this) {
+                $orderRange->setOrder(null);
+            }
+        }
 
         return $this;
     }

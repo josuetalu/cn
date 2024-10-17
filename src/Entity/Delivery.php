@@ -40,6 +40,26 @@ class Delivery
      */
     private ?int $cardTotal = null;
 
+    /**
+     * @ORM\OneToOne(targetEntity=OutOfService::class, mappedBy="delivery", cascade={"persist", "remove"})
+     */
+    private $isOutOfService;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $recipient;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $supportingDoc;
+
     // Getters and Setters
 
     public function getId(): ?int
@@ -99,6 +119,59 @@ class Delivery
     public function setCardTotal(?int $cardTotal): self
     {
         $this->cardTotal = $cardTotal;
+        return $this;
+    }
+
+    public function getIsOutOfService(): ?OutOfService
+    {
+        return $this->isOutOfService;
+    }
+
+    public function setIsOutOfService(OutOfService $isOutOfService): self
+    {
+        // set the owning side of the relation if necessary
+        if ($isOutOfService->getDelivery() !== $this) {
+            $isOutOfService->setDelivery($this);
+        }
+
+        $this->isOutOfService = $isOutOfService;
+
+        return $this;
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getRecipient(): ?string
+    {
+        return $this->recipient;
+    }
+
+    public function setRecipient(string $recipient): self
+    {
+        $this->recipient = $recipient;
+
+        return $this;
+    }
+
+    public function getSupportingDoc(): ?string
+    {
+        return $this->supportingDoc;
+    }
+
+    public function setSupportingDoc(string $supportingDoc): self
+    {
+        $this->supportingDoc = $supportingDoc;
+
         return $this;
     }
 }

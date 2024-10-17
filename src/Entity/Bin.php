@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BinRepository")
@@ -29,17 +30,27 @@ class Bin
     private ?string $serial = null;
 
     /** 
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true)
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 10,
+     *      exactMessage = "Un BIN doit avoir exactement {{ limit }} caractères."
+     * )
      */
     private ?string $range1 = null;
 
     /** 
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true)
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 10,
+     *      exactMessage = "Un BIN doit avoir exactement {{ limit }} caractères."
+     * )
      */
     private ?string $range2 = null;
 
     /** 
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=16, nullable=true)
      */
     private ?string $lastEmittedPan = null;
 
@@ -55,10 +66,16 @@ class Bin
      */
     private Collection $orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Range::class, mappedBy="bin")
+     */
+    private $ranges;
+
     
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->ranges = new ArrayCollection();
     }
 
     // Implement the __toString method
@@ -175,6 +192,40 @@ class Bin
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Range>
+     */
+    public function getRanges(): Collection
+    {
+        return $this->ranges;
+    }
+
+    public function addRange(Range $range): self
+    {
+        if (!$this->ranges->contains($range)) {
+            $this->ranges[] = $range;
+            $range->setBin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRange(Range $range): self
+    {
+        if ($this->ranges->removeElement($range)) {
+            // set the owning side to null (unless already changed)
+            if ($range->getBin() === $this) {
+                $range->setBin(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 
 
 }

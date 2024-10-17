@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,7 @@ class UserController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
+
 
     /**
      * @Route("/new", name="app_user_new", methods={"GET", "POST"})

@@ -32,8 +32,19 @@
                             <td>{{ user.fullname }}</td>
                             <td>{{ user.registrationDate ? user.registrationDate|date('Y-m-d') : '' }}</td>
                             <td>
-                                <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-info btn-sm">Afficher</a>
-                                <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                <a style="" href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-primary">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">Afficher</span>
+                                </a>
+
+                                <a style="" href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                    <span class="text">Modifier</span>
+                                </a>
                             </td>
                         </tr>
                     {% else %}

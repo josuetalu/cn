@@ -37,6 +37,7 @@
                         <p>{{ delivery.cardTotal }}</p>
                     </div>
                 </div>
+                <a href="{{ path('app_out_of_service_new', {'id': delivery.id}) }}" class="btn btn-danger btn-sm">Mettre le stock hors service</a>
             </div>
             <div class="card-footer text-end">
                 <a href="{{ path('app_delivery_index') }}" class="btn btn-secondary">Retour à la liste</a>

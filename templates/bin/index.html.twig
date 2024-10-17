@@ -3,7 +3,7 @@
 {% block title %}Gestion des BIN{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div class="mt-4 container">
         <h1 class="mb-4">Gestion des BIN</h1>
         <a href="{{ path('app_bin_new') }}" class="btn btn-primary mb-3">Créer un nouveau Bin</a>
         <div class="card"> 
@@ -18,8 +18,6 @@
                         <th>Date d'octroi</th>
                         <th>No. Serie</th>
                         <th>Banque</th>
-                        <th>Range (debut)</th>
-                        <th>Range (fin)</th>
                         <th>Dernier PAN émis</th>
                         <th>Actions</th>
                     </tr>
@@ -31,12 +29,30 @@
                         <td>{{ bin.grantDate ? bin.grantDate|date('Y-m-d') : '' }}</td>
                         <td>{{ bin.serial }}</td>
                         <td>{{ bin.bank.bankCode }}</td>
-                        <td>{{ bin.range1 }}</td>
-                        <td>{{ bin.range2 }}</td>
+                        {#<td>{{ bin.range1 }}</td>
+                        <td>{{ bin.range2 }}</td>#}
                         <td>{{ bin.lastEmittedPan }}</td>
                         <td>
-                            <a href="{{ path('app_bin_show', {'id': bin.id}) }}" class="btn btn-info btn-sm">Afficher</a>
-                            <a href="{{ path('app_bin_edit', {'id': bin.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                <a style="margin-top:5px" href="{{ path('app_bin_show', {'id': bin.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-primary">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">Afficher</span>
+                                </a>
+
+                                <a style="margin-top:5px" href="{{ path('app_bin_edit', {'id': bin.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                    <span class="text">Modifier</span>
+                                </a>
+
+                                <a style="margin-top:5px" href="{{ path('app_range_index', {'binid': bin.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-warning">
+                                        <i class="fas fa-arrows-alt-h"></i>
+                                    </span>
+                                    <span class="text">Plages</span>
+                                </a>
                         </td>
                     </tr>
                 {% else %}

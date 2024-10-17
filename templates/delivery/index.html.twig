@@ -33,7 +33,13 @@
                             <td>{{ delivery.range2 }}</td>
                             <td>{{ delivery.cardTotal }}</td>
                             <td>
-                                <a href="{{ path('app_delivery_show', {'id': delivery.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+
+                                <a style="" href="{{ path('app_delivery_show', {'id': delivery.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-primary">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">Afficher</span>
+                                </a>
                             </td>
                         </tr>
                     {% else %}

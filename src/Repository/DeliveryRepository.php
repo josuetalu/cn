@@ -14,4 +14,12 @@ class DeliveryRepository extends ServiceEntityRepository
     }
 
     // Ajoutez ici vos méthodes personnalisées
+    public function add(Delivery $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

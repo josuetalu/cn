@@ -7,6 +7,7 @@ use App\Entity\Order;
 use App\Entity\Delivery;
 use App\Entity\Bin;
 use App\Entity\Bank;
+use App\Entity\OutOfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,7 @@ class DashboardController extends AbstractController
         $deliveryCount = $this->entityManager->getRepository(Delivery::class)->count([]);
         $binCount = $this->entityManager->getRepository(Bin::class)->count([]);
         $bankCount = $this->entityManager->getRepository(Bank::class)->count([]);
+        $outOfServiceCount = $this->entityManager->getRepository(OutOfService::class)->count([]);
 
         return $this->render('dashboard/index.html.twig', [
             'userCount' => $userCount,

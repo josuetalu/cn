@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use App\Form\ChangePasswordType;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("profile")
@@ -69,6 +71,49 @@ class ProfileController extends AbstractController
         return $this->renderForm('profile/edit.html.twig', [
             'user' => $user,
             'form' => $form,
+        ]);
+    }
+
+
+    /**
+     * @Route("/change-password", name="app_profile_change_password")
+     */
+    public function changePassword(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+    
+        // Vérifiez que l'utilisateur est connecté
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour changer votre mot de passe.');
+        }
+    
+        $form = $this->createForm(ChangePasswordType::class);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+    
+            // Vérifiez le mot de passe actuel
+            if ($userPasswordHasher->isPasswordValid($user, $data['current_password'])) {
+                // Hachez le nouveau mot de passe et mettez à jour l'utilisateur
+                $newPassword = $userPasswordHasher->hashPassword($user, $data['new_password']);
+                $user->setPassword($newPassword);
+    
+                // Enregistrer les changements
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Votre mot de passe a été modifié avec succès.');
+    
+                return $this->redirectToRoute('app_logout'); // Redirigez vers une page appropriée
+            } else {
+                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+            }
+        }
+    
+        return $this->render('profile/change_password.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

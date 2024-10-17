@@ -39,12 +39,28 @@
                             <td>{{ order.range1 }}</td>
                             <td>{{ order.range2 }}</td>
                             <td>{{ order.cardType }}</td>
-                            <td>
-                                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn btn-info btn-sm">Afficher</a>
-                                <br/>
-                                <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                <br/>
-                                <a href="{{ path('app_order_confirmation', {'id': order.id}) }}" class="btn btn-warning btn-sm">Livraison</a>
+                            <td>                 
+                                <a style="margin:2px" href="{{ path('app_order_show', {'id': order.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-primary">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">Afficher</span>
+                                </a>
+                                
+
+                                <a style="margin:2px" href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                    <span class="text">Modifier</span>
+                                </a>  
+                                
+                                <a style="margin:2px" href="{{ path('app_order_confirmation', {'id': order.id}) }}" class="btn btn-sm btn-secondary btn-icon-split">
+                                    <span class="icon text-white bg-primary">
+                                        <i class="fas fa-truck"></i>
+                                    </span>
+                                    <span class="text">Livraison</span>
+                                </a>                               
                             </td>
                         </tr>
                     {% else %}
