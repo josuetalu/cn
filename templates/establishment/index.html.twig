@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index des Établissements{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestion des Établissements</h1>
+        <a href="{{ path('app_establishment_new') }}" class="btn btn-primary mb-3">Créer un nouvel établissement</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des Établissements</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Date de Création</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for establishment in establishments %}
+                        <tr>
+                            <td>{{ establishment.id }}</td>
+                            <td>{{ establishment.name }}</td>
+                            <td>{{ establishment.createdAt ? establishment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>
+                                <a href="{{ path('app_establishment_show', {'id': establishment.id}) }}" class="btn btn-sm btn-info">Afficher</a>
+                                <a href="{{ path('app_establishment_edit', {'id': establishment.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

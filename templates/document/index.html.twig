@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index des Documents{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestion des Documents</h1>
+        {#<a href="{{ path('app_document_new') }}" class="btn btn-primary mb-3">Créer un nouveau document</a>#}
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des Documents</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Prénom</th>
+                            <th>Nom de Famille</th>
+                            <th>Poste</th>
+                            <th>Genre</th>
+                            <th>Retour</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for document in documents %}
+                        <tr>
+                            <td>{{ document.id }}</td>
+                            <td>{{ document.firstName }}</td>
+                            <td>{{ document.lastName }}</td>
+                            <td>{{ document.postName }}</td>
+                            <td>{{ document.gender ? 'Oui' : 'Non' }}</td>
+                            <td>{{ document.isBack ? 'Oui' : 'Non' }}</td>
+                            <td>
+                                <a href="{{ path('app_document_show', {'id': document.id}) }}" class="btn btn-sm btn-info">Afficher</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

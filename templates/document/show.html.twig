@@ -1,0 +1,246 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Document{% endblock %}
+
+{% block body %}
+<div class="mt-4" style="padding:15px">
+    <h1 class="my-4">Traitement du document</h1>
+
+<div class="card mb-3 mt-4">
+        <div class="card-header">
+            Détails du document
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="document-item">
+                        <strong>Id</strong>
+                        <p>1</p>
+                    </div>
+                    <div class="document-item">
+                        <strong>FirstName</strong>
+                        <p>John</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="document-item">
+                        <strong>LastName</strong>
+                        <p>Doe</p>
+                    </div>
+                    <div class="document-item">
+                        <strong>PostName</strong>
+                        <p>Manager</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="document-item">
+                        <strong>Gender</strong>
+                        <p>Yes</p>
+                    </div>
+                    <div class="document-item">
+                        <strong>IsBack</strong>
+                        <p>No</p>
+                    </div>
+                </div> 
+            </div>
+            
+            <div id="more-info" class="collapse">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="document-item">
+                            <strong>Address</strong>
+                            <p>123 Rue Exemple</p>
+                        </div>
+                        <div class="document-item">
+                            <strong>Birth Date</strong>
+                            <p>01/01/1990</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="document-item">
+                            <strong>Nationality</strong>
+                            <p>Française</p>
+                        </div>
+                        <div class="document-item">
+                            <strong>Status</strong>
+                            <p>Actif</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="document-item">
+                            <strong>Occupation</strong>
+                            <p>Développeur</p>
+                        </div>
+                        <div class="document-item">
+                            <strong>Email</strong>
+                            <p>john.doe@example.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="toggle-button" class="btn btn-primary mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#more-info" aria-expanded="false" aria-controls="more-info">
+                Voir plus
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Colonne de gauche : Liste des actions (historique) -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Historique des actions
+                </div>
+                
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Etape</th>
+                                <th>Etablissement</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for action in actions %}
+                            <tr>
+                                <td>{{ action.step.label }}</td>
+                                <td>{{ action.step.establishment.name }}</td>
+                                <td>{{ action.createdAt|date('Y-m-d')  }}</td>
+                                <td>{{ action.validated ? '<span class="btn btn-sm btn-success">Oui</span>' : '<span class="btn btn-danger">Non</span>' }}</td>
+                                <td> <a class="btn btn-sm btn-primary" href="">Voir</a> </td>
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne de droite : Formulaire de commentaire -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Formulaire d'action
+                </div>
+                <div class="card-body">
+                    {% if canAct %}
+                        <div>
+                            {{ form_start(form) }}
+                                {{ form_widget(form) }}
+                                 <br/><br/>
+                                <!-- Zone de dépôt Dropzone -->
+                                {#<div id="file-dropzone" class="dropzone">
+                                        <div class="dz-message">
+                                            <h5 class="mb-3">Cliquez ici pour ajouter des fichiers</h5>
+                                        </div>
+                                </div>
+                                <div id="file-labels"></div>#}
+
+                                <br/><br/>
+                                <button class="btn btn-success mt-2" name="submit_validate" type="submit">
+                                    {{ button_label|default('Valider et envoyer à l\'étape suivante') }}
+                                </button>
+                                <br/>
+                                <button class="btn btn-warning mt-2" name="submit_resend" type="submit">
+                                    {{ button_label|default('Renvoyer à l\'etape précédente') }}
+                                </button>
+                                <br/>
+                                <button class="btn btn-danger mt-2" name="submit_refuse" type="submit">
+                                    {{ button_label|default('Refuser le document') }}
+                                </button>
+               
+                            {{ form_end(form) }}
+                        </div>
+                    {% else %}
+                        <p>Aucune action requise pour cet établissement en ce moment</p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Boutons de retour et d'édition -->
+    <div class="mt-4">
+        {#<a class="btn btn-info" href="{{ path('app_document_index') }}">Retour à la liste</a>
+        <a class="btn btn-warning" href="{{ path('app_document_edit', {'id': document.id}) }}">Modifier</a>#}
+    </div>
+
+    {{ include('document/_delete_form.html.twig') }}
+</div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/basic.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <script>
+        document.getElementById('toggle-button').addEventListener('click', function () {
+            const moreInfo = document.getElementById('more-info');
+            if (moreInfo.classList.contains('show')) {
+                this.textContent = 'Voir plus';
+            } else {
+                this.textContent = 'Voir moins';
+            }
+        });
+    </script>
+
+    <script>
+        Dropzone.autoDiscover = false;
+
+        var myDropzone = new Dropzone("#file-dropzone", {
+            url: "{{ path('app_document_show', {'id': 1}) }}", // Add the URL here
+            paramName: "files", // The name that will be used to transfer the files
+            addRemoveLinks: true,
+            maxFilesize: 2, // Maximum size in MB
+            autoProcessQueue: false, // Disable automatic processing
+            acceptedFiles: ".jpg,.png,.jpeg,.pdf",
+            dictDefaultMessage: "Mettez ici les fichiers à envoyer",
+            init: function() {
+                var myDropzone = this;
+
+                // Handle the form submission
+                document.querySelector("form").onsubmit = function(e) {
+                    e.preventDefault(); // Prevent default form submission
+                    
+                    // Manually process the Dropzone queue to send files
+                    myDropzone.processQueue();
+                };
+
+                this.on("addedfile", function(file) {
+                    // Generate a unique UUID using the crypto API
+                    file.uuid = crypto.randomUUID();
+
+                    // Create a label for each uploaded file
+                    var label = document.createElement('input');
+                    label.type = 'text';
+                    label.name = 'labels[' + file.uuid + ']'; // Use UUID in the name
+                    label.id = 'label-' + file.uuid; // Assign a unique ID
+                    label.placeholder = 'Label for ' + file.name;
+                    label.classList.add('form-control');
+
+                    // Append the label input to the file-labels div
+                    document.getElementById('file-labels').appendChild(label);
+                    file.labelElement = label; // Store reference to the label element
+                });
+
+                // Listen for the 'removedfile' event to remove the label
+                this.on("removedfile", function(file) {
+                    if (file.labelElement) {
+                        file.labelElement.remove(); // Remove the label
+                    }
+                    console.log(file.name + " a été supprimé."); // Log for confirmation
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .dropzone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+
+
+{% endblock %}

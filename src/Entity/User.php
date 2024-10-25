@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -46,6 +48,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="date", nullable=true)
      */
     private $registrationDate;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Action::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $action;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Action::class, mappedBy="user")
+     */
+    private $actions;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Profile::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $profile;
+
+    public function __construct()
+    {
+        $this->actions = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->fullname; // Ou tout autre champ pertinent
+    }
 
     public function getId(): ?int
     {
@@ -151,6 +179,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegistrationDate(\DateTimeInterface $registrationDate): self
     {
         $this->registrationDate = $registrationDate;
+
+        return $this;
+    }
+
+    public function getAction(): ?Action
+    {
+        return $this->action;
+    }
+
+    public function setAction(Action $action): self
+    {
+        // set the owning side of the relation if necessary
+        if ($action->getUser() !== $this) {
+            $action->setUser($this);
+        }
+
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Action>
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(Action $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+            $action->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAction(Action $action): self
+    {
+        if ($this->actions->removeElement($action)) {
+            // set the owning side to null (unless already changed)
+            if ($action->getUser() === $this) {
+                $action->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(Profile $profile): self
+    {
+        $this->profile = $profile;
 
         return $this;
     }

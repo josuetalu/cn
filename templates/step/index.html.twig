@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index des Étapes{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestion des Étapes</h1>
+        <a href="{{ path('app_step_new') }}" class="btn btn-primary mb-3">Créer une nouvelle étape</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Liste des Étapes</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Label</th>
+                            <th>Position</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for step in steps %}
+                        <tr>
+                            <td>{{ step.id }}</td>
+                            <td>{{ step.code }}</td>
+                            <td>{{ step.label }}</td>
+                            <td>{{ step.position }}</td>
+                            <td>
+                                <a href="{{ path('app_step_show', {'id': step.id}) }}" class="btn btn-sm btn-info">Afficher</a>
+                                <a href="{{ path('app_step_edit', {'id': step.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

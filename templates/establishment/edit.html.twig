@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Établissement{% endblock %}
+
+{% block body %}
+    <div class="container mt-4" style="width: 40rem;">
+        <h1 class="mb-4">Modifier l'Établissement</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Formulaire de Modification</h5>
+            </div>
+            <div class="card-body">
+                {{ include('establishment/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('app_establishment_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                {{ include('establishment/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

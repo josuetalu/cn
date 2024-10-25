@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'Établissement{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Détails de l'Établissement</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Informations sur l'Établissement</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong>ID:</strong>
+                        <p>{{ establishment.id }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Nom:</strong>
+                        <p>{{ establishment.name }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Date de Création:</strong>
+                        <p>{{ establishment.createdAt ? establishment.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('app_establishment_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                <a href="{{ path('app_establishment_edit', {'id': establishment.id}) }}" class="btn btn-warning">Modifier</a>
+                {{ include('establishment/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
